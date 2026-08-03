@@ -1,0 +1,14 @@
+# Maven build output
+target/
+*.jar
+*.war
+*.ear
+
+# IDE & System
+.idea/
+.vscode/
+*.iml
+.DS_Store
+
+# Environment
+.env
