@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("")
-@CrossOrigin(origins = "*", maxAge = 3600)
 public class StatisticsController {
 
     private final StatisticsService statisticsService;
