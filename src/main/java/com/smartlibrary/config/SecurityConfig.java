@@ -96,6 +96,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Allow preflight requests
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                // Allow favicon, error, and health endpoints
+                .requestMatchers("/favicon.ico", "/error", "/health", "/api/health").permitAll()
                 // Public authentication endpoints
                 .requestMatchers("/auth/**", "/api/auth/**").permitAll()
                 // Public read-only browsing for books and categories
