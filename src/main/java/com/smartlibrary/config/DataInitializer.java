@@ -8,7 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Component
@@ -101,13 +100,10 @@ public class DataInitializer implements CommandLineRunner {
             Category ai = categoryRepository.findByName("Artificial Intelligence").orElse(null);
             Category ml = categoryRepository.findByName("Machine Learning").orElse(null);
             Category cs = categoryRepository.findByName("Computer Science").orElse(null);
-            Category ds = categoryRepository.findByName("Data Science").orElse(null);
             Category phil = categoryRepository.findByName("Philosophy & Cognitive Science").orElse(null);
             Category sci = categoryRepository.findByName("Science & Physics").orElse(null);
             Category biz = categoryRepository.findByName("Business & Startup").orElse(null);
             Category self = categoryRepository.findByName("Self Help & Psychology").orElse(null);
-            Category web = categoryRepository.findByName("Web Development").orElse(null);
-            Category sec = categoryRepository.findByName("Cyber Security").orElse(null);
 
             if (ai != null && cs != null) {
                 bookRepository.saveAll(List.of(

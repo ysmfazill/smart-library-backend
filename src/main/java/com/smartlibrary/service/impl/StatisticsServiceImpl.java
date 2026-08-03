@@ -2,7 +2,6 @@ package com.smartlibrary.service.impl;
 
 import com.smartlibrary.dto.LeaderboardEntryDTO;
 import com.smartlibrary.dto.UserStatisticsDTO;
-import com.smartlibrary.entity.AchievementType;
 import com.smartlibrary.entity.User;
 import com.smartlibrary.entity.UserStatistics;
 import com.smartlibrary.repository.UserRepository;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service

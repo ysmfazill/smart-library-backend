@@ -76,7 +76,7 @@ public class AuthServiceImpl implements AuthService {
     public LoginResponseDTO loginUser(LoginRequestDTO request) {
         log.info("Attempting login for email: {}", request.getEmail());
         
-        Authentication authentication = authenticationManager.authenticate(
+        authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
 
