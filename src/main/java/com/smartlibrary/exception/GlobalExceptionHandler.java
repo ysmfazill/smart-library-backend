@@ -49,6 +49,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ApiResponse.error("Validation failed", errors), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(org.springframework.web.HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ApiResponse<Void>> handleMethodNotSupportedException(org.springframework.web.HttpRequestMethodNotSupportedException ex) {
+        return new ResponseEntity<>(ApiResponse.error(ex.getMessage()), HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    @ExceptionHandler(org.springframework.http.converter.HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiResponse<Void>> handleHttpMessageNotReadableException(org.springframework.http.converter.HttpMessageNotReadableException ex) {
+        return new ResponseEntity<>(ApiResponse.error("Required request body is missing or malformed"), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler({org.springframework.web.servlet.resource.NoResourceFoundException.class, org.springframework.web.servlet.NoHandlerFoundException.class})
     public ResponseEntity<ApiResponse<Void>> handleNotFoundException(Exception ex) {
         return new ResponseEntity<>(ApiResponse.error("Resource not found: " + ex.getMessage()), HttpStatus.NOT_FOUND);
