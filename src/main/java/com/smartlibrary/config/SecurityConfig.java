@@ -58,8 +58,6 @@ public class SecurityConfig {
         return authProvider;
     }
 
-    @org.springframework.beans.factory.annotation.Value("${cors.allowed-origins:http://localhost:5173}")
-    private String allowedOrigins;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
@@ -69,8 +67,12 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of(allowedOrigins.split(",")));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+        configuration.setAllowedOriginPatterns(List.of(
+            "http://localhost:5173",
+            "https://smart-library-frontend-nu.vercel.app",
+            "https://*.vercel.app"
+        ));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
 
@@ -82,7 +84,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+            .cors(org.springframework.security.config.Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
             .exceptionHandling(exception -> exception
                 .authenticationEntryPoint(unauthorizedHandler)
