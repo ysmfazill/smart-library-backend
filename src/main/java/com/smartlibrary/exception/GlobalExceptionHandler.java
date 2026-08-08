@@ -64,6 +64,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ApiResponse.error("Resource not found: " + ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(org.springframework.web.multipart.MaxUploadSizeExceededException.class)
+    public ResponseEntity<ApiResponse<Void>> handleMaxUploadSizeExceededException(org.springframework.web.multipart.MaxUploadSizeExceededException ex) {
+        return new ResponseEntity<>(ApiResponse.error("File size exceeds the maximum allowed limit of 50MB"), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGlobalException(Exception ex) {
         ex.printStackTrace();
