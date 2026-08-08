@@ -29,13 +29,16 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
     private final BookMapper bookMapper;
+    private final com.smartlibrary.service.FileStorageService fileStorageService;
 
     public BookServiceImpl(BookRepository bookRepository,
                            CategoryRepository categoryRepository,
-                           BookMapper bookMapper) {
+                           BookMapper bookMapper,
+                           com.smartlibrary.service.FileStorageService fileStorageService) {
         this.bookRepository = bookRepository;
         this.categoryRepository = categoryRepository;
         this.bookMapper = bookMapper;
+        this.fileStorageService = fileStorageService;
     }
 
     @Override
@@ -131,6 +134,9 @@ public class BookServiceImpl implements BookService {
         if (request.getPublicationYear() != null) book.setPublicationYear(request.getPublicationYear());
         if (request.getPages() != null) book.setPages(request.getPages());
         if (request.getCoverImage() != null) book.setCoverImage(request.getCoverImage());
+        if (request.getBookFileUrl() != null) book.setBookFileUrl(request.getBookFileUrl());
+        if (request.getBookFileType() != null) book.setBookFileType(request.getBookFileType());
+        if (request.getBookFileName() != null) book.setBookFileName(request.getBookFileName());
         if (request.getKeywords() != null) book.setKeywords(request.getKeywords());
 
         if (request.getTotalCopies() != null) {
@@ -147,12 +153,52 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional
+    public BookResponseDTO uploadBookFile(Long bookId, org.springframework.web.multipart.MultipartFile file) {
+        log.info("Uploading book file for book ID: {}", bookId);
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new ResourceNotFoundException("Book", "id", bookId));
+
+        if (file == null || file.isEmpty()) {
+            throw new BadRequestException("Uploaded file cannot be empty");
+        }
+
+        String filename = file.getOriginalFilename();
+        if (filename == null || (!filename.toLowerCase().endsWith(".pdf") && !"application/pdf".equalsIgnoreCase(file.getContentType()))) {
+            throw new BadRequestException("Invalid book file format. Only PDF files are supported");
+        }
+
+        // 50 MB max limit
+        if (file.getSize() > 50 * 1024 * 1024) {
+            throw new BadRequestException("Book file size exceeds maximum limit of 50MB");
+        }
+
+        // Delete previous stored file if it exists
+        if (book.getBookFileName() != null && book.getBookFileUrl() != null && !book.getBookFileUrl().startsWith("http")) {
+            fileStorageService.deleteFile(book.getBookFileUrl());
+        }
+
+        String storedPath = fileStorageService.storeFile(file, "books");
+        book.setBookFileUrl(storedPath);
+        book.setBookFileName(filename);
+        book.setBookFileType("application/pdf");
+
+        Book savedBook = bookRepository.save(book);
+        log.info("Successfully saved digital book file for book ID: {}", bookId);
+        return bookMapper.toResponseDTO(savedBook);
+    }
+
+    @Override
+    @Transactional
     public void deleteBook(Long bookId) {
         log.info("Deleting book ID: {}", bookId);
-        if (!bookRepository.existsById(bookId)) {
-            throw new ResourceNotFoundException("Book", "id", bookId);
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new ResourceNotFoundException("Book", "id", bookId));
+
+        if (book.getBookFileUrl() != null && !book.getBookFileUrl().startsWith("http")) {
+            fileStorageService.deleteFile(book.getBookFileUrl());
         }
-        bookRepository.deleteById(bookId);
+
+        bookRepository.delete(book);
         log.info("Book ID: {} deleted", bookId);
     }
 

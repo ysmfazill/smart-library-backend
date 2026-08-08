@@ -56,20 +56,32 @@ public class ReadingHistoryController {
         return new ResponseEntity<>(ApiResponse.success("Reading progress saved", response), HttpStatus.CREATED);
     }
 
+    @GetMapping("/book/{bookId}")
+    public ResponseEntity<ApiResponse<ReadingHistoryResponseDTO>> getReadingProgressByBook(
+            @PathVariable Long bookId,
+            @RequestParam(defaultValue = "1") Long userId) {
+        ReadingHistoryResponseDTO progress = readingHistoryService.getReadingProgressByBookId(userId, bookId);
+        return ResponseEntity.ok(ApiResponse.success("Book reading progress retrieved", progress));
+    }
+
     /**
      * Updates reading progress for a specific book.
      *
      * @param bookId Target Book ID.
      * @param userId User ID parameter.
      * @param progressPercentage Percentage completed (0.0 to 100.0).
+     * @param currentPage Optional current page number.
+     * @param totalPages Optional total pages count.
      * @return Updated reading history item.
      */
     @PutMapping("/{bookId}")
     public ResponseEntity<ApiResponse<ReadingHistoryResponseDTO>> updateProgress(
             @PathVariable Long bookId,
             @RequestParam(defaultValue = "1") Long userId,
-            @RequestParam Double progressPercentage) {
-        ReadingHistoryResponseDTO response = readingHistoryService.updateReadingProgress(userId, bookId, progressPercentage);
+            @RequestParam(required = false) Double progressPercentage,
+            @RequestParam(required = false) Integer currentPage,
+            @RequestParam(required = false) Integer totalPages) {
+        ReadingHistoryResponseDTO response = readingHistoryService.updateReadingProgress(userId, bookId, progressPercentage, currentPage, totalPages);
         return ResponseEntity.ok(ApiResponse.success("Reading progress updated successfully", response));
     }
 }

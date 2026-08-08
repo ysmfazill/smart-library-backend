@@ -31,6 +31,9 @@ public class BookMapper {
                 .pages(book.getPages())
                 .rating(book.getRating())
                 .coverImage(book.getCoverImage())
+                .bookFileUrl(book.getBookFileUrl())
+                .bookFileType(book.getBookFileType())
+                .bookFileName(book.getBookFileName())
                 .keywords(book.getKeywords())
 
                 .availableCopies(book.getAvailableCopies())
@@ -67,6 +70,9 @@ public class BookMapper {
                 .publicationYear(dto.getPublicationYear())
                 .pages(dto.getPages())
                 .coverImage(dto.getCoverImage())
+                .bookFileUrl(dto.getBookFileUrl())
+                .bookFileType(dto.getBookFileType())
+                .bookFileName(dto.getBookFileName())
                 .keywords(dto.getKeywords())
 
                 .totalCopies(dto.getTotalCopies())

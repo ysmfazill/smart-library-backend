@@ -33,4 +33,6 @@ public interface BookService {
     List<BookSummaryDTO> getTrendingBooks(int limit);
 
     List<BookSummaryDTO> getRecommendedBooks(Long userId, int limit);
+
+    BookResponseDTO uploadBookFile(Long bookId, org.springframework.web.multipart.MultipartFile file);
 }

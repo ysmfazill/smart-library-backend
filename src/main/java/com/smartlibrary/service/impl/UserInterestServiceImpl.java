@@ -51,9 +51,23 @@ public class UserInterestServiceImpl implements UserInterestService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<UserInterestResponseDTO> getAllInterests() {
+        return userInterestRepository.findAll().stream()
+                .map(userInterestMapper::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<UserInterestResponseDTO> getUserInterests(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        if (userId == null || userId <= 0) {
+            return getAllInterests();
+        }
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            log.warn("User ID {} not found when fetching interests, returning all available interests", userId);
+            return getAllInterests();
+        }
 
         return user.getUserInterests().stream()
                 .map(userInterestMapper::toResponseDTO)

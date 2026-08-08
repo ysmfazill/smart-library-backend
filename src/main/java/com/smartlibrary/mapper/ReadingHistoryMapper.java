@@ -24,6 +24,11 @@ public class ReadingHistoryMapper {
                 .userName(history.getUser() != null ? history.getUser().getFullName() : null)
                 .book(bookMapper.toSummaryDTO(history.getBook()))
                 .progressPercentage(history.getProgressPercentage())
+                .currentPage(history.getCurrentPage())
+                .totalPages(history.getTotalPages())
+                .status(history.getStatus())
+                .startedAt(history.getStartedAt())
+                .completedAt(history.getCompletedAt())
                 .lastReadDate(history.getLastReadDate())
                 .completed(history.getCompleted())
                 .build();
@@ -35,6 +40,9 @@ public class ReadingHistoryMapper {
         }
         return ReadingHistory.builder()
                 .progressPercentage(dto.getProgressPercentage())
+                .currentPage(dto.getCurrentPage() != null ? dto.getCurrentPage() : 1)
+                .totalPages(dto.getTotalPages())
+                .status(dto.getStatus() != null ? dto.getStatus() : "READING")
                 .completed(dto.getCompleted() != null ? dto.getCompleted() : false)
                 .build();
     }

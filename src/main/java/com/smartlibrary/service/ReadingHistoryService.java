@@ -13,6 +13,10 @@ public interface ReadingHistoryService {
 
     ReadingHistoryResponseDTO updateReadingProgress(Long userId, Long bookId, Double progressPercentage);
 
+    ReadingHistoryResponseDTO updateReadingProgress(Long userId, Long bookId, Double progressPercentage, Integer currentPage, Integer totalPages);
+
+    ReadingHistoryResponseDTO getReadingProgressByBookId(Long userId, Long bookId);
+
     List<ReadingHistoryResponseDTO> getReadingHistory(Long userId);
 
     Page<ReadingHistoryResponseDTO> getReadingHistory(Long userId, Pageable pageable);

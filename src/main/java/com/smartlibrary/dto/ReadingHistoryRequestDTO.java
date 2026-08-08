@@ -23,5 +23,11 @@ public class ReadingHistoryRequestDTO {
     @Builder.Default
     private Double progressPercentage = 0.0;
 
+    private Integer currentPage;
+
+    private Integer totalPages;
+
+    private String status;
+
     private Boolean completed;
 }

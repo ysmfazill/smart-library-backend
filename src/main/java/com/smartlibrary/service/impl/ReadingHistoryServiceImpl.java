@@ -68,10 +68,20 @@ public class ReadingHistoryServiceImpl implements ReadingHistoryService {
 
         if (existingHistory.isPresent()) {
             history = existingHistory.get();
-            oldProgress = history.getProgressPercentage();
-            wasCompleted = history.getCompleted();
+            oldProgress = history.getProgressPercentage() != null ? history.getProgressPercentage() : 0.0;
+            wasCompleted = Boolean.TRUE.equals(history.getCompleted());
+
             if (request.getProgressPercentage() != null) {
                 history.setProgressPercentage(request.getProgressPercentage());
+            }
+            if (request.getCurrentPage() != null) {
+                history.setCurrentPage(request.getCurrentPage());
+            }
+            if (request.getTotalPages() != null) {
+                history.setTotalPages(request.getTotalPages());
+            }
+            if (request.getStatus() != null) {
+                history.setStatus(request.getStatus());
             }
             if (request.getCompleted() != null) {
                 history.setCompleted(request.getCompleted());
@@ -94,7 +104,13 @@ public class ReadingHistoryServiceImpl implements ReadingHistoryService {
     @Override
     @Transactional
     public ReadingHistoryResponseDTO updateReadingProgress(Long userId, Long bookId, Double progressPercentage) {
-        log.info("Updating reading progress for user ID: {}, book ID: {} to {}%", userId, bookId, progressPercentage);
+        return updateReadingProgress(userId, bookId, progressPercentage, null, null);
+    }
+
+    @Override
+    @Transactional
+    public ReadingHistoryResponseDTO updateReadingProgress(Long userId, Long bookId, Double progressPercentage, Integer currentPage, Integer totalPages) {
+        log.info("Updating reading progress for user ID: {}, book ID: {} to {}% page: {}", userId, bookId, progressPercentage, currentPage);
 
         ReadingHistory history = readingHistoryRepository.findByUserIdAndBookId(userId, bookId)
                 .orElseGet(() -> {
@@ -102,15 +118,32 @@ public class ReadingHistoryServiceImpl implements ReadingHistoryService {
                             .orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
                     Book book = bookRepository.findById(bookId)
                             .orElseThrow(() -> new ResourceNotFoundException("Book", "id", bookId));
-                    return ReadingHistory.builder().user(user).book(book).progressPercentage(0.0).completed(false).build();
+                    return ReadingHistory.builder()
+                            .user(user)
+                            .book(book)
+                            .progressPercentage(0.0)
+                            .currentPage(1)
+                            .status("READING")
+                            .completed(false)
+                            .build();
                 });
 
         double oldProgress = history.getProgressPercentage() != null ? history.getProgressPercentage() : 0.0;
-        boolean wasCompleted = history.getCompleted() != null ? history.getCompleted() : false;
+        boolean wasCompleted = Boolean.TRUE.equals(history.getCompleted());
 
-        history.setProgressPercentage(progressPercentage);
-        if (progressPercentage >= 100.0) {
+        if (progressPercentage != null) {
+            history.setProgressPercentage(progressPercentage);
+        }
+        if (currentPage != null) {
+            history.setCurrentPage(currentPage);
+        }
+        if (totalPages != null) {
+            history.setTotalPages(totalPages);
+        }
+
+        if (history.getProgressPercentage() != null && history.getProgressPercentage() >= 100.0) {
             history.setCompleted(true);
+            history.setStatus("COMPLETED");
         }
 
         ReadingHistory savedHistory = readingHistoryRepository.save(history);
@@ -119,6 +152,13 @@ public class ReadingHistoryServiceImpl implements ReadingHistoryService {
         updateStats(savedHistory, oldProgress, wasCompleted);
 
         return readingHistoryMapper.toResponseDTO(savedHistory);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ReadingHistoryResponseDTO getReadingProgressByBookId(Long userId, Long bookId) {
+        Optional<ReadingHistory> history = readingHistoryRepository.findByUserIdAndBookId(userId, bookId);
+        return history.map(readingHistoryMapper::toResponseDTO).orElse(null);
     }
 
     private void updateStats(ReadingHistory history, double oldProgress, boolean wasCompleted) {

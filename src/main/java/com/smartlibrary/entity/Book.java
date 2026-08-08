@@ -64,6 +64,15 @@ public class Book {
     @Column(name = "cover_image")
     private String coverImage;
 
+    @Column(name = "book_file_url", length = 512)
+    private String bookFileUrl;
+
+    @Column(name = "book_file_type")
+    private String bookFileType;
+
+    @Column(name = "book_file_name")
+    private String bookFileName;
+
     private String keywords;
 
     @Column(name = "ai_summary", columnDefinition = "TEXT")

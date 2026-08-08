@@ -33,11 +33,11 @@ public class AuthServiceImpl implements AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     public AuthServiceImpl(UserRepository userRepository,
-                           UserInterestRepository userInterestRepository,
-                           UserMapper userMapper,
-                           PasswordEncoder passwordEncoder,
-                           AuthenticationManager authenticationManager,
-                           JwtTokenProvider jwtTokenProvider) {
+            UserInterestRepository userInterestRepository,
+            UserMapper userMapper,
+            PasswordEncoder passwordEncoder,
+            AuthenticationManager authenticationManager,
+            JwtTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.userInterestRepository = userInterestRepository;
         this.userMapper = userMapper;
@@ -56,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
 
         User user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        
+
         if (user.getAvatar() == null || user.getAvatar().isBlank()) {
             user.setAvatar("avatar1.png");
         }
@@ -75,10 +75,9 @@ public class AuthServiceImpl implements AuthService {
     @Transactional(readOnly = true)
     public LoginResponseDTO loginUser(LoginRequestDTO request) {
         log.info("Attempting login for email: {}", request.getEmail());
-        
+
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
 
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new BadRequestException("Invalid email or password"));

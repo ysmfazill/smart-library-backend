@@ -153,6 +153,17 @@ public class AdminController {
     }
 
     /**
+     * Upload digital book content file (PDF) for a book.
+     */
+    @PostMapping("/books/{bookId}/file")
+    public ResponseEntity<ApiResponse<BookResponseDTO>> uploadBookFile(
+            @PathVariable Long bookId,
+            @RequestParam("file") org.springframework.web.multipart.MultipartFile file) {
+        BookResponseDTO updatedBook = bookService.uploadBookFile(bookId, file);
+        return ResponseEntity.ok(ApiResponse.success("Digital book file uploaded successfully", updatedBook));
+    }
+
+    /**
      * Administrative endpoint to update a book in inventory.
      *
      * @param id Book ID.

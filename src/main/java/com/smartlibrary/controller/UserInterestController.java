@@ -26,16 +26,27 @@ public class UserInterestController {
     }
 
     /**
-     * Gets recommendation interest topics associated with a user.
+     * Gets recommendation interest topics associated with a user or all available interests.
      *
-     * @param userId User ID parameter.
+     * @param userId Optional User ID parameter.
      * @return List of user interest DTOs.
      */
     @GetMapping
     public ResponseEntity<ApiResponse<List<UserInterestResponseDTO>>> getUserInterests(
-            @RequestParam(defaultValue = "1") Long userId) {
+            @RequestParam(required = false) Long userId) {
         List<UserInterestResponseDTO> interests = userInterestService.getUserInterests(userId);
         return ResponseEntity.ok(ApiResponse.success("User interests retrieved successfully", interests));
+    }
+
+    /**
+     * Retrieves all available system interest categories.
+     *
+     * @return List of all interest DTOs.
+     */
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse<List<UserInterestResponseDTO>>> getAllInterests() {
+        List<UserInterestResponseDTO> interests = userInterestService.getAllInterests();
+        return ResponseEntity.ok(ApiResponse.success("All system interests retrieved successfully", interests));
     }
 
     /**

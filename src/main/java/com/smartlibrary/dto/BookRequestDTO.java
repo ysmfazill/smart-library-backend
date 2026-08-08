@@ -31,6 +31,9 @@ public class BookRequestDTO {
     private Integer publicationYear;
     private Integer pages;
     private String coverImage;
+    private String bookFileUrl;
+    private String bookFileType;
+    private String bookFileName;
     private String keywords;
 
 

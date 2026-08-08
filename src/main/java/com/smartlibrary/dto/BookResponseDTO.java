@@ -22,6 +22,9 @@ public class BookResponseDTO {
     private Integer pages;
     private Double rating;
     private String coverImage;
+    private String bookFileUrl;
+    private String bookFileType;
+    private String bookFileName;
     private String keywords;
 
     private Integer availableCopies;

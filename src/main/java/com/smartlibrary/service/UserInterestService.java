@@ -12,6 +12,8 @@ public interface UserInterestService {
 
     List<UserInterestResponseDTO> getUserInterests(Long userId);
 
+    List<UserInterestResponseDTO> getAllInterests();
+
     Set<UserInterestResponseDTO> saveUserInterests(Long userId, Set<Long> interestIds);
 
     Set<UserInterestResponseDTO> updateUserInterests(Long userId, Set<Long> interestIds);

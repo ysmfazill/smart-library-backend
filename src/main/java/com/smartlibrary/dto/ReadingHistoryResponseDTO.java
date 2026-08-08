@@ -16,6 +16,11 @@ public class ReadingHistoryResponseDTO {
     private String userName;
     private BookSummaryDTO book;
     private Double progressPercentage;
+    private Integer currentPage;
+    private Integer totalPages;
+    private String status;
+    private LocalDateTime startedAt;
+    private LocalDateTime completedAt;
     private LocalDateTime lastReadDate;
     private Boolean completed;
 }

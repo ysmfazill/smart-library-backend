@@ -23,9 +23,11 @@ import java.util.List;
 public class BookController {
 
     private final BookService bookService;
+    private final com.smartlibrary.service.FileStorageService fileStorageService;
 
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, com.smartlibrary.service.FileStorageService fileStorageService) {
         this.bookService = bookService;
+        this.fileStorageService = fileStorageService;
     }
 
     /**
@@ -54,6 +56,34 @@ public class BookController {
     public ResponseEntity<ApiResponse<BookResponseDTO>> getBookById(@PathVariable Long id) {
         BookResponseDTO book = bookService.getBookById(id);
         return ResponseEntity.ok(ApiResponse.success("Book retrieved successfully", book));
+    }
+
+    /**
+     * Streams digital book content file (PDF) for a book.
+     */
+    @GetMapping("/{id}/file")
+    public ResponseEntity<org.springframework.core.io.Resource> getBookFile(@PathVariable Long id) {
+        BookResponseDTO book = bookService.getBookById(id);
+        if (book.getBookFileUrl() == null || book.getBookFileUrl().isBlank()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // If URL is external (http/https), redirect or return not found for stream
+        if (book.getBookFileUrl().startsWith("http://") || book.getBookFileUrl().startsWith("https://")) {
+            return ResponseEntity.status(org.springframework.http.HttpStatus.FOUND)
+                    .location(java.net.URI.create(book.getBookFileUrl()))
+                    .build();
+        }
+
+        org.springframework.core.io.Resource resource = fileStorageService.loadFileAsResource(book.getBookFileUrl());
+        String contentType = book.getBookFileType() != null ? book.getBookFileType() : "application/pdf";
+        String filename = book.getBookFileName() != null ? book.getBookFileName() : "book.pdf";
+
+        return ResponseEntity.ok()
+                .contentType(org.springframework.http.MediaType.parseMediaType(contentType))
+                .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
+                .header(org.springframework.http.HttpHeaders.ACCEPT_RANGES, "bytes")
+                .body(resource);
     }
 
     /**
