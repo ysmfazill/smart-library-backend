@@ -53,18 +53,23 @@ public class DataInitializer implements CommandLineRunner {
         }
 
         // 2. Seed User Interests
-        if (userInterestRepository.count() == 0) {
-            log.info("Seeding user interest taxonomy...");
-            userInterestRepository.saveAll(List.of(
-                UserInterest.builder().interestName("Artificial Intelligence").build(),
-                UserInterest.builder().interestName("Machine Learning").build(),
-                UserInterest.builder().interestName("Quantum Computing").build(),
-                UserInterest.builder().interestName("Distributed Systems").build(),
-                UserInterest.builder().interestName("Philosophy of Mind").build(),
-                UserInterest.builder().interestName("Cyber Security").build(),
-                UserInterest.builder().interestName("Web Architecture").build(),
-                UserInterest.builder().interestName("Data Engineering").build()
-            ));
+        List<String> defaultInterests = List.of(
+            "Artificial Intelligence",
+            "Machine Learning",
+            "Quantum Computing",
+            "Distributed Systems",
+            "Philosophy of Mind",
+            "Cyber Security",
+            "Web Architecture",
+            "Data Engineering",
+            "Python",
+            "C++"
+        );
+
+        for (String interestName : defaultInterests) {
+            if (!userInterestRepository.existsByInterestName(interestName)) {
+                userInterestRepository.save(UserInterest.builder().interestName(interestName).build());
+            }
         }
 
         // 3. Seed Default Admin User

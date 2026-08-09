@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface UserStatisticsRepository extends JpaRepository<UserStatistics, Long> {
     Optional<UserStatistics> findByUserId(Long userId);
 
-    @Query("SELECT us FROM UserStatistics us JOIN us.user u ORDER BY us.booksRead DESC, us.pagesRead DESC, us.readingHours DESC, us.currentStreak DESC")
+    @Query("SELECT us FROM UserStatistics us JOIN FETCH us.user u ORDER BY us.booksRead DESC, us.pagesRead DESC, us.readingHours DESC, us.currentStreak DESC")
     List<UserStatistics> findTopReaders(Pageable pageable);
 }
