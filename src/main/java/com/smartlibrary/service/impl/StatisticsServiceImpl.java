@@ -19,9 +19,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -33,14 +36,22 @@ public class StatisticsServiceImpl implements StatisticsService {
     private final CacheManager cacheManager;
 
     public StatisticsServiceImpl(UserStatisticsRepository statisticsRepository, UserRepository userRepository, AchievementService achievementService) {
-        this(statisticsRepository, userRepository, achievementService, null);
+        this(statisticsRepository, userRepository, achievementService, Optional.empty());
     }
 
     public StatisticsServiceImpl(UserStatisticsRepository statisticsRepository, UserRepository userRepository, AchievementService achievementService, CacheManager cacheManager) {
+        this(statisticsRepository, userRepository, achievementService, Optional.ofNullable(cacheManager));
+    }
+
+    @Autowired
+    public StatisticsServiceImpl(UserStatisticsRepository statisticsRepository,
+                                 UserRepository userRepository,
+                                 AchievementService achievementService,
+                                 Optional<CacheManager> cacheManager) {
         this.statisticsRepository = statisticsRepository;
         this.userRepository = userRepository;
         this.achievementService = achievementService;
-        this.cacheManager = cacheManager;
+        this.cacheManager = cacheManager.orElse(null);
     }
 
     @Override

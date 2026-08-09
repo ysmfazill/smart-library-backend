@@ -56,7 +56,7 @@ public class DataInitializer implements CommandLineRunner {
         List<String> defaultInterests = List.of(
             "Artificial Intelligence",
             "Machine Learning",
-            "Quantum Computing",
+            "C",
             "Distributed Systems",
             "Philosophy of Mind",
             "Cyber Security",
