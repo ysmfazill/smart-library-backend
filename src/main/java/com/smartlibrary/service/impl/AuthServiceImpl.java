@@ -18,6 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.smartlibrary.entity.UserStatistics;
+import com.smartlibrary.repository.UserStatisticsRepository;
+
 import java.util.HashSet;
 import java.util.List;
 
@@ -27,6 +30,7 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
     private final UserInterestRepository userInterestRepository;
+    private final UserStatisticsRepository userStatisticsRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -34,12 +38,14 @@ public class AuthServiceImpl implements AuthService {
 
     public AuthServiceImpl(UserRepository userRepository,
             UserInterestRepository userInterestRepository,
+            UserStatisticsRepository userStatisticsRepository,
             UserMapper userMapper,
             PasswordEncoder passwordEncoder,
             AuthenticationManager authenticationManager,
             JwtTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;
         this.userInterestRepository = userInterestRepository;
+        this.userStatisticsRepository = userStatisticsRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
@@ -67,6 +73,17 @@ public class AuthServiceImpl implements AuthService {
         }
 
         User savedUser = userRepository.save(user);
+
+        // Initialize user statistics
+        userStatisticsRepository.save(UserStatistics.builder()
+                .user(savedUser)
+                .booksRead(0)
+                .pagesRead(0)
+                .readingHours(0)
+                .currentStreak(0)
+                .maxStreak(0)
+                .build());
+
         log.info("Successfully registered user ID: {} with email: {}", savedUser.getId(), savedUser.getEmail());
         return userMapper.toRegisterResponseDTO(savedUser);
     }

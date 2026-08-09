@@ -85,6 +85,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     @Transactional
+    @CacheEvict(value = {"monthlyLeaderboard", "allTimeLeaderboard"}, allEntries = true)
     public void updateReadingStats(Long userId, int pagesRead, boolean completed) {
         User user = userRepository.findById(userId).orElseThrow();
         UserStatistics stats = statisticsRepository.findByUserId(userId)
@@ -143,11 +144,14 @@ public class StatisticsServiceImpl implements StatisticsService {
         List<LeaderboardEntryDTO> leaderboard = new java.util.ArrayList<>();
         for (UserStatistics stats : topReaders) {
             String topBadge = achievementService.getTopBadge(stats.getUser().getId());
+            String userAvatar = (stats.getUser().getAvatar() != null && !stats.getUser().getAvatar().isBlank())
+                    ? stats.getUser().getAvatar() : "avatar1.png";
             leaderboard.add(LeaderboardEntryDTO.builder()
                     .rank(rank++)
                     .userId(stats.getUser().getId())
                     .name(stats.getUser().getFullName())
-                    .profilePicture("https://api.dicebear.com/7.x/avataaars/svg?seed=" + stats.getUser().getFullName())
+                    .avatar(userAvatar)
+                    .profilePicture(userAvatar)
                     .booksCompleted(stats.getBooksRead())
                     .pagesRead(stats.getPagesRead())
                     .readingHours(stats.getReadingHours())

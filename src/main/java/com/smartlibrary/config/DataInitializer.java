@@ -17,17 +17,23 @@ public class DataInitializer implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final BookRepository bookRepository;
     private final UserInterestRepository userInterestRepository;
+    private final UserStatisticsRepository userStatisticsRepository;
+    private final com.smartlibrary.service.AchievementService achievementService;
     private final PasswordEncoder passwordEncoder;
 
     public DataInitializer(UserRepository userRepository,
                            CategoryRepository categoryRepository,
                            BookRepository bookRepository,
                            UserInterestRepository userInterestRepository,
+                           UserStatisticsRepository userStatisticsRepository,
+                           com.smartlibrary.service.AchievementService achievementService,
                            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
         this.bookRepository = bookRepository;
         this.userInterestRepository = userInterestRepository;
+        this.userStatisticsRepository = userStatisticsRepository;
+        this.achievementService = achievementService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -80,22 +86,53 @@ public class DataInitializer implements CommandLineRunner {
                 .password(passwordEncoder.encode("Admin@123"))
                 .role(Role.ROLE_ADMIN)
                 .enabled(true)
-                .build());
-            log.info("Default admin account created.");
-        } else {
-            log.info("Default admin account already exists.");
-        }
-
-        // 4. Seed Default Standard User
-        if (userRepository.count() == 0) {
-            log.info("Seeding default student/researcher credentials...");
-            userRepository.save(User.builder()
-                .fullName("Alex Reinholt")
-                .email("user@library.com")
-                .password(passwordEncoder.encode("user123"))
-                .role(Role.ROLE_USER)
                 .avatar("avatar1.png")
                 .build());
+            log.info("Default admin account created.");
+        }
+
+        // 4. Seed Leaderboard Sample Readers & User Statistics
+        if (userStatisticsRepository.count() == 0) {
+            log.info("Seeding top readers and user statistics for leaderboard...");
+
+            List<Object[]> sampleUsers = List.of(
+                new Object[]{"Alex Reinholt", "user@library.com", "avatar1.png", 18, 900, 18, 14},
+                new Object[]{"Dr. Elena Rostova", "elena@library.com", "avatar2.png", 14, 720, 14, 10},
+                new Object[]{"Marcus Vance", "marcus@library.com", "avatar3.png", 11, 550, 11, 7},
+                new Object[]{"Sophia Chen", "sophia@library.com", "avatar4.png", 8, 420, 8, 5},
+                new Object[]{"David Miller", "david@library.com", "avatar5.png", 5, 280, 5, 3}
+            );
+
+            for (Object[] uData : sampleUsers) {
+                String name = (String) uData[0];
+                String email = (String) uData[1];
+                String avatar = (String) uData[2];
+                int books = (Integer) uData[3];
+                int pages = (Integer) uData[4];
+                int hours = (Integer) uData[5];
+                int streak = (Integer) uData[6];
+
+                User u = userRepository.findByEmail(email).orElseGet(() -> userRepository.save(User.builder()
+                        .fullName(name)
+                        .email(email)
+                        .password(passwordEncoder.encode("user123"))
+                        .role(Role.ROLE_USER)
+                        .avatar(avatar)
+                        .build()));
+
+                UserStatistics stats = UserStatistics.builder()
+                        .user(u)
+                        .booksRead(books)
+                        .pagesRead(pages)
+                        .readingHours(hours)
+                        .currentStreak(streak)
+                        .maxStreak(streak + 2)
+                        .lastReadDate(java.time.LocalDateTime.now())
+                        .build();
+
+                userStatisticsRepository.save(stats);
+                achievementService.evaluateAchievements(u.getId(), stats);
+            }
         }
 
         // 5. Seed Real Book Dataset

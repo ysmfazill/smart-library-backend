@@ -100,8 +100,8 @@ public class SecurityConfig {
                 .requestMatchers("/favicon.ico", "/error", "/health", "/api/health").permitAll()
                 // Public authentication endpoints
                 .requestMatchers("/auth/**", "/api/auth/**").permitAll()
-                // Public read-only browsing for books, categories, and interests
-                .requestMatchers(HttpMethod.GET, "/books/**", "/api/books/**", "/categories/**", "/api/categories/**", "/interests/**", "/api/interests/**").permitAll()
+                // Public read-only browsing for books, categories, interests, leaderboard, and statistics
+                .requestMatchers(HttpMethod.GET, "/books/**", "/api/books/**", "/categories/**", "/api/categories/**", "/interests/**", "/api/interests/**", "/leaderboard/**", "/api/leaderboard/**", "/statistics/**", "/api/statistics/**").permitAll()
                 // Swagger / OpenAPI documentation endpoints
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 // Protected Admin endpoints

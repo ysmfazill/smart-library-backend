@@ -11,6 +11,7 @@ public class LeaderboardEntryDTO {
     private int rank;
     private Long userId;
     private String name;
+    private String avatar;
     private String profilePicture;
     private int booksCompleted;
     private int pagesRead;
