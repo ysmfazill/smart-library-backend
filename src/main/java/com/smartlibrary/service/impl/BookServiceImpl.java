@@ -108,6 +108,10 @@ public class BookServiceImpl implements BookService {
         Book book = bookMapper.toEntity(request);
         book.setCategory(category);
 
+        if (book.getCoverImage() == null || book.getCoverImage().isBlank()) {
+            book.setCoverImage("https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600");
+        }
+
         Book savedBook = bookRepository.save(book);
         log.info("Successfully added book ID: {}", savedBook.getId());
         return bookMapper.toResponseDTO(savedBook);

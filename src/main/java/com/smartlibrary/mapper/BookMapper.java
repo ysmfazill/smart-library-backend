@@ -15,10 +15,15 @@ public class BookMapper {
         this.categoryMapper = categoryMapper;
     }
 
+    private static final String DEFAULT_COVER_IMAGE = "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600";
+
     public BookResponseDTO toResponseDTO(Book book) {
         if (book == null) {
             return null;
         }
+        String cover = (book.getCoverImage() != null && !book.getCoverImage().isBlank()) 
+                ? book.getCoverImage() : DEFAULT_COVER_IMAGE;
+
         return BookResponseDTO.builder()
                 .id(book.getId())
                 .title(book.getTitle())
@@ -30,7 +35,7 @@ public class BookMapper {
                 .publicationYear(book.getPublicationYear())
                 .pages(book.getPages())
                 .rating(book.getRating())
-                .coverImage(book.getCoverImage())
+                .coverImage(cover)
                 .bookFileUrl(book.getBookFileUrl())
                 .bookFileType(book.getBookFileType())
                 .bookFileName(book.getBookFileName())
@@ -47,11 +52,14 @@ public class BookMapper {
         if (book == null) {
             return null;
         }
+        String cover = (book.getCoverImage() != null && !book.getCoverImage().isBlank()) 
+                ? book.getCoverImage() : DEFAULT_COVER_IMAGE;
+
         return BookSummaryDTO.builder()
                 .id(book.getId())
                 .title(book.getTitle())
                 .author(book.getAuthor())
-                .coverImage(book.getCoverImage())
+                .coverImage(cover)
                 .rating(book.getRating())
                 .categoryName(book.getCategory() != null ? book.getCategory().getName() : null)
                 .build();
