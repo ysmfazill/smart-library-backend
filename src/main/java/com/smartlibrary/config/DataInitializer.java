@@ -19,6 +19,7 @@ public class DataInitializer implements CommandLineRunner {
     private final UserInterestRepository userInterestRepository;
     private final UserStatisticsRepository userStatisticsRepository;
     private final com.smartlibrary.service.AchievementService achievementService;
+    private final com.smartlibrary.service.BookCoverService bookCoverService;
     private final PasswordEncoder passwordEncoder;
 
     public DataInitializer(UserRepository userRepository,
@@ -27,6 +28,7 @@ public class DataInitializer implements CommandLineRunner {
                            UserInterestRepository userInterestRepository,
                            UserStatisticsRepository userStatisticsRepository,
                            com.smartlibrary.service.AchievementService achievementService,
+                           com.smartlibrary.service.BookCoverService bookCoverService,
                            PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
@@ -34,6 +36,7 @@ public class DataInitializer implements CommandLineRunner {
         this.userInterestRepository = userInterestRepository;
         this.userStatisticsRepository = userStatisticsRepository;
         this.achievementService = achievementService;
+        this.bookCoverService = bookCoverService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -314,5 +317,6 @@ public class DataInitializer implements CommandLineRunner {
         }
 
         log.info("Production book dataset successfully verified and seeded.");
+        bookCoverService.auditAndResolveAllCovers();
     }
 }

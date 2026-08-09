@@ -22,6 +22,7 @@ public class BookResponseDTO {
     private Integer pages;
     private Double rating;
     private String coverImage;
+    private String coverSource;
     private String bookFileUrl;
     private String bookFileType;
     private String bookFileName;

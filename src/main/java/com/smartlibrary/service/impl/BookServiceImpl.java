@@ -30,15 +30,18 @@ public class BookServiceImpl implements BookService {
     private final CategoryRepository categoryRepository;
     private final BookMapper bookMapper;
     private final com.smartlibrary.service.FileStorageService fileStorageService;
+    private final com.smartlibrary.service.BookCoverService bookCoverService;
 
     public BookServiceImpl(BookRepository bookRepository,
                            CategoryRepository categoryRepository,
                            BookMapper bookMapper,
-                           com.smartlibrary.service.FileStorageService fileStorageService) {
+                           com.smartlibrary.service.FileStorageService fileStorageService,
+                           com.smartlibrary.service.BookCoverService bookCoverService) {
         this.bookRepository = bookRepository;
         this.categoryRepository = categoryRepository;
         this.bookMapper = bookMapper;
         this.fileStorageService = fileStorageService;
+        this.bookCoverService = bookCoverService;
     }
 
     @Override
@@ -108,11 +111,8 @@ public class BookServiceImpl implements BookService {
         Book book = bookMapper.toEntity(request);
         book.setCategory(category);
 
-        if (book.getCoverImage() == null || book.getCoverImage().isBlank()) {
-            book.setCoverImage("https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600");
-        }
-
         Book savedBook = bookRepository.save(book);
+        bookCoverService.resolveCoverUrl(savedBook);
         log.info("Successfully added book ID: {}", savedBook.getId());
         return bookMapper.toResponseDTO(savedBook);
     }

@@ -24,10 +24,20 @@ public class BookController {
 
     private final BookService bookService;
     private final com.smartlibrary.service.FileStorageService fileStorageService;
+    private final com.smartlibrary.service.BookCoverService bookCoverService;
 
-    public BookController(BookService bookService, com.smartlibrary.service.FileStorageService fileStorageService) {
+    public BookController(BookService bookService,
+                          com.smartlibrary.service.FileStorageService fileStorageService,
+                          com.smartlibrary.service.BookCoverService bookCoverService) {
         this.bookService = bookService;
         this.fileStorageService = fileStorageService;
+        this.bookCoverService = bookCoverService;
+    }
+
+    @GetMapping("/audit-covers")
+    public ResponseEntity<ApiResponse<java.util.Map<String, Object>>> auditBookCovers() {
+        java.util.Map<String, Object> report = bookCoverService.auditAndResolveAllCovers();
+        return ResponseEntity.ok(ApiResponse.success("Book cover system audit report generated", report));
     }
 
     /**
