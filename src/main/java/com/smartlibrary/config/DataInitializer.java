@@ -162,6 +162,9 @@ public class DataInitializer implements CommandLineRunner {
                         .keywords("clean code, refactoring, agile, software architecture")
                         .description("Even bad code can function. But if code isn't clean, it can bring a development organization to its knees.")
                         .aiSummary("Essential handbook on writing readable, maintainable, and highly robust software code.")
+                        .bookFileUrl("books/3fdf8bee-bbd5-4345-a2a6-3624b2333c25.pdf")
+                        .bookFileName("clean-code.pdf")
+                        .bookFileType("application/pdf")
                         .totalCopies(8)
                         .availableCopies(8)
                         .build(),
@@ -178,6 +181,9 @@ public class DataInitializer implements CommandLineRunner {
                         .keywords("habits, productivity, psychology, self improvement")
                         .description("Tiny Changes, Remarkable Results. A proven framework for improving every single day.")
                         .aiSummary("Actionable psychological principles to form positive daily habits and dismantle counterproductive behavior.")
+                        .bookFileUrl("books/594ed835-0f2d-4517-bdd6-0b5673f9789d.pdf")
+                        .bookFileName("atomic-habits.pdf")
+                        .bookFileType("application/pdf")
                         .totalCopies(12)
                         .availableCopies(12)
                         .build(),
@@ -194,6 +200,9 @@ public class DataInitializer implements CommandLineRunner {
                         .keywords("deep learning, neural networks, transformers, pyTorch")
                         .description("Comprehensive guide to modern deep learning architectures, attention mechanisms, and scalable AI model deployment.")
                         .aiSummary("Essential reading for AI researchers focusing on transformer architectures and high-dimensional vector embeddings.")
+                        .bookFileUrl("books/64e73ceb-5603-4045-a007-bed9a2b8a504.pdf")
+                        .bookFileName("deep-learning.pdf")
+                        .bookFileType("application/pdf")
                         .totalCopies(6)
                         .availableCopies(6)
                         .build(),
@@ -210,6 +219,9 @@ public class DataInitializer implements CommandLineRunner {
                         .keywords("distributed systems, scalability, databases, fault tolerance")
                         .description("An invaluable guide to data storage, processing architectures, consistency models, and fault-tolerant system design.")
                         .aiSummary("Master key trade-offs in distributed storage, replication algorithms, and consensus protocols.")
+                        .bookFileUrl("books/6f9a91b8-10f8-4526-bc01-de5e4bf74b92.pdf")
+                        .bookFileName("designing-data-intensive-applications.pdf")
+                        .bookFileType("application/pdf")
                         .totalCopies(10)
                         .availableCopies(10)
                         .build(),
@@ -226,6 +238,9 @@ public class DataInitializer implements CommandLineRunner {
                         .keywords("quantum computing, qubits, quantum algorithms, physics")
                         .description("The definitive textbook on quantum computation, quantum circuits, error correction, and information theory.")
                         .aiSummary("Foundational text covering qubit mechanics, Shor's algorithm, Grover's search, and physical implementations.")
+                        .bookFileUrl("books/c489fd8b-fa96-4fec-9f9c-dbbb983d07be.pdf")
+                        .bookFileName("quantum-computation-and-information.pdf")
+                        .bookFileType("application/pdf")
                         .totalCopies(4)
                         .availableCopies(4)
                         .build(),
@@ -242,6 +257,9 @@ public class DataInitializer implements CommandLineRunner {
                         .keywords("artificial intelligence, search algorithms, multi-agent systems, probabilistic logic")
                         .description("The standard textbook in artificial intelligence covering intelligent agents, automated reasoning, knowledge representation, and machine learning.")
                         .aiSummary("The authoritative textbook bridging classic symbolic AI with modern statistical learning and reinforcement learning.")
+                        .bookFileUrl("books/14f02ce2-e990-4004-a2e0-3e70bc308ccc.pdf")
+                        .bookFileName("artificial-intelligence-a-modern-approach.pdf")
+                        .bookFileType("application/pdf")
                         .totalCopies(7)
                         .availableCopies(7)
                         .build(),
@@ -258,6 +276,9 @@ public class DataInitializer implements CommandLineRunner {
                         .keywords("machine learning, scikit-learn, tensorflow, keras, deep learning")
                         .description("Through concrete examples, minimal theory, and production-ready Python frameworks, this book helps you gain an intuitive understanding of concepts.")
                         .aiSummary("Practical guide covering linear regression, decision trees, random forests, and deep neural nets using Python.")
+                        .bookFileUrl("books/2b1e9fc4-ec82-45ef-b5b3-b6f72855adbd.pdf")
+                        .bookFileName("hands-on-machine-learning.pdf")
+                        .bookFileType("application/pdf")
                         .totalCopies(9)
                         .availableCopies(9)
                         .build(),
@@ -274,6 +295,9 @@ public class DataInitializer implements CommandLineRunner {
                         .keywords("superintelligence, AI alignment, existential risk, future of technology")
                         .description("Presents a profound analysis of what happens when machine intelligence surpasses human intelligence.")
                         .aiSummary("Explores existential risks of artificial superintelligence and strategies for strategic control and value alignment.")
+                        .bookFileUrl("books/37a847c1-4e09-4714-8f11-25e6f90389bf.pdf")
+                        .bookFileName("superintelligence.pdf")
+                        .bookFileType("application/pdf")
                         .totalCopies(5)
                         .availableCopies(5)
                         .build(),
@@ -290,6 +314,9 @@ public class DataInitializer implements CommandLineRunner {
                         .keywords("pragmatic programmer, software engineering, best practices, career development")
                         .description("Illustrates the best approaches and major pitfalls of software development regardless of language or paradigm.")
                         .aiSummary("Timeless wisdom on software craftsmanship, domain modeling, automation, and personal responsibility in engineering.")
+                        .bookFileUrl("books/8fee39cc-bf09-4234-a432-320f6f338929.pdf")
+                        .bookFileName("the-pragmatic-programmer.pdf")
+                        .bookFileType("application/pdf")
                         .totalCopies(10)
                         .availableCopies(10)
                         .build(),
@@ -306,6 +333,9 @@ public class DataInitializer implements CommandLineRunner {
                         .keywords("startups, innovation, technology, business strategy, monopoly")
                         .description("The great secret of our time is that there are still uncharted frontiers to explore and new inventions to create.")
                         .aiSummary("Contrarian insights on technology startups, building monopolies through innovation, and zero-to-one technological leaps.")
+                        .bookFileUrl("books/ad6c9832-9c23-4f10-a76a-410c7c5e0fe7.pdf")
+                        .bookFileName("zero-to-one.pdf")
+                        .bookFileType("application/pdf")
                         .totalCopies(6)
                         .availableCopies(6)
                         .build()
@@ -313,6 +343,33 @@ public class DataInitializer implements CommandLineRunner {
             }
         }
 
+        // Always verify and link PDF file URLs for existing database records if unlinked
+        ensurePdfMapped("Clean Code", "books/3fdf8bee-bbd5-4345-a2a6-3624b2333c25.pdf", "clean-code.pdf");
+        ensurePdfMapped("Atomic Habits", "books/594ed835-0f2d-4517-bdd6-0b5673f9789d.pdf", "atomic-habits.pdf");
+        ensurePdfMapped("Deep Learning", "books/64e73ceb-5603-4045-a007-bed9a2b8a504.pdf", "deep-learning.pdf");
+        ensurePdfMapped("Designing Data-Intensive Applications", "books/6f9a91b8-10f8-4526-bc01-de5e4bf74b92.pdf", "designing-data-intensive-applications.pdf");
+        ensurePdfMapped("Quantum Computation", "books/c489fd8b-fa96-4fec-9f9c-dbbb983d07be.pdf", "quantum-computation-and-information.pdf");
+        ensurePdfMapped("Artificial Intelligence", "books/14f02ce2-e990-4004-a2e0-3e70bc308ccc.pdf", "artificial-intelligence-a-modern-approach.pdf");
+        ensurePdfMapped("Hands-On Machine Learning", "books/2b1e9fc4-ec82-45ef-b5b3-b6f72855adbd.pdf", "hands-on-machine-learning.pdf");
+        ensurePdfMapped("Superintelligence", "books/37a847c1-4e09-4714-8f11-25e6f90389bf.pdf", "superintelligence.pdf");
+        ensurePdfMapped("The Pragmatic Programmer", "books/8fee39cc-bf09-4234-a432-320f6f338929.pdf", "the-pragmatic-programmer.pdf");
+        ensurePdfMapped("Zero to One", "books/ad6c9832-9c23-4f10-a76a-410c7c5e0fe7.pdf", "zero-to-one.pdf");
+
         log.info("Production book dataset successfully verified and seeded.");
+    }
+
+    private void ensurePdfMapped(String titleSnippet, String fileUrl, String fileName) {
+        bookRepository.findAll().stream()
+                .filter(b -> b.getTitle().toLowerCase().contains(titleSnippet.toLowerCase()))
+                .findFirst()
+                .ifPresent(b -> {
+                    if (b.getBookFileUrl() == null || b.getBookFileUrl().isBlank()) {
+                        b.setBookFileUrl(fileUrl);
+                        b.setBookFileName(fileName);
+                        b.setBookFileType("application/pdf");
+                        bookRepository.save(b);
+                        log.info("Mapped PDF for book ID {}: {} -> {}", b.getId(), b.getTitle(), fileUrl);
+                    }
+                });
     }
 }
