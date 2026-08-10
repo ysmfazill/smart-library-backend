@@ -13,7 +13,6 @@ public class BookSummaryDTO {
     private String title;
     private String author;
     private String coverImage;
-    private String coverSource;
     private Double rating;
     private String categoryName;
     private String matchReason;

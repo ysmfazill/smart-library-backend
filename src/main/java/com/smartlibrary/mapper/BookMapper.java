@@ -36,7 +36,6 @@ public class BookMapper {
                 .pages(book.getPages())
                 .rating(book.getRating())
                 .coverImage(cover)
-                .coverSource(book.getCoverSource() != null ? book.getCoverSource().name() : "REAL")
                 .bookFileUrl(book.getBookFileUrl())
                 .bookFileType(book.getBookFileType())
                 .bookFileName(book.getBookFileName())
@@ -61,7 +60,6 @@ public class BookMapper {
                 .title(book.getTitle())
                 .author(book.getAuthor())
                 .coverImage(cover)
-                .coverSource(book.getCoverSource() != null ? book.getCoverSource().name() : "REAL")
                 .rating(book.getRating())
                 .categoryName(book.getCategory() != null ? book.getCategory().getName() : null)
                 .build();

@@ -64,11 +64,6 @@ public class Book {
     @Column(name = "cover_image")
     private String coverImage;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "cover_source")
-    @Builder.Default
-    private CoverSource coverSource = CoverSource.REAL;
-
     @Column(name = "book_file_url", length = 512)
     private String bookFileUrl;
 
